@@ -6,11 +6,8 @@ load_dotenv()
 
 # Initialize OpenAI client only if API key is available
 client = None
-try:
-    if os.getenv('OPENAI_API_KEY'):
-        client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-except Exception as e:
-    print(f"Failed to initialize OpenAI client: {e}")
+if os.getenv('OPENAI_API_KEY'):
+    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 def get_sustainability_recommendations(product):
     """
