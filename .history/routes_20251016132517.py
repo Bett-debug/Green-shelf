@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models import Product, User, db
+from models import Product, db
 from ai_utils import get_sustainability_recommendations
 
 api = Blueprint('api', __name__)
@@ -79,26 +79,6 @@ def delete_product(id):
     db.session.delete(product)
     db.session.commit()
     return '', 204
-
-@api.route('/users/register', methods=['POST'])
-def register_user():
-    data = request.get_json()
-    if not data or not all(k in data for k in ('username', 'email', 'password')):
-        return jsonify({'error': 'Username, email, and password are required'}), 400
-    
-    # Check for existing username or email
-    if User.query.filter_by(username=data['username']).first():
-        return jsonify({'error': 'Username already taken'}), 400
-    if User.query.filter_by(email=data['email']).first():
-        return jsonify({'error': 'Email already registered'}), 400
-    
-    # Create and save user
-    user = User(username=data['username'], email=data['email'])
-    user.set_password(data['password'])
-    db.session.add(user)
-    db.session.commit()
-    
-    return jsonify(user.to_dict()), 201
 
 @api.route('/recommendations/<int:id>', methods=['GET'])
 def get_recommendations(id):
