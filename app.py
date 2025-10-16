@@ -1,8 +1,12 @@
 from flask import Flask
+from flask_jwt_extended import JWTManager
 from db import init_db
 from routes import register_routes
 
 app = Flask(__name__)
+
+# Initialize JWT
+jwt = JWTManager(app)
 
 # Initialize database
 init_db(app)

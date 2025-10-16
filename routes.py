@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import create_access_token
 from models import Product, User, db
 from ai_utils import get_sustainability_recommendations
 
@@ -99,6 +100,19 @@ def register_user():
     db.session.commit()
     
     return jsonify(user.to_dict()), 201
+
+@api.route('/users/login', methods=['POST'])
+def login_user():
+    data = request.get_json()
+    if not data or not all(k in data for k in ('username', 'password')):
+        return jsonify({'error': 'Username and password are required'}), 400
+    
+    user = User.query.filter_by(username=data['username']).first()
+    if not user or not user.check_password(data['password']):
+        return jsonify({'error': 'Invalid username or password'}), 401
+    
+    access_token = create_access_token(identity=user.id)
+    return jsonify({'access_token': access_token, 'user': user.to_dict()}), 200
 
 @api.route('/recommendations/<int:id>', methods=['GET'])
 def get_recommendations(id):
