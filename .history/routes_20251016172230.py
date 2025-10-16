@@ -111,63 +111,8 @@ def login_user():
     if not user or not user.check_password(data['password']):
         return jsonify({'error': 'Invalid username or password'}), 401
     
-    access_token = create_access_token(identity=str(user.id))
+    access_token = create_access_token(identity=user.id)
     return jsonify({'access_token': access_token, 'user': user.to_dict()}), 200
-
-@api.route('/purchases', methods=['POST'])
-@jwt_required()
-def create_purchase():
-    data = request.get_json()
-    if not data or 'product_id' not in data:
-        return jsonify({'error': 'Product ID is required'}), 400
-
-    current_user_id = get_jwt_identity()
-    product_id = data['product_id']
-    quantity = data.get('quantity', 1)
-
-    # Validate product exists
-    product = Product.query.get(product_id)
-    if not product:
-        return jsonify({'error': 'Product not found'}), 404
-
-    # Validate quantity
-    try:
-        quantity = int(quantity)
-        if quantity < 1:
-            return jsonify({'error': 'Quantity must be at least 1'}), 400
-    except (ValueError, TypeError):
-        return jsonify({'error': 'Quantity must be a valid integer'}), 400
-
-    # Create purchase
-    purchase = Purchase(
-        user_id=current_user_id,
-        product_id=product_id,
-        quantity=quantity
-    )
-    db.session.add(purchase)
-    db.session.commit()
-
-    return jsonify(purchase.to_dict()), 201
-
-@api.route('/purchases', methods=['GET'])
-@jwt_required()
-def get_user_purchases():
-    current_user_id = get_jwt_identity()
-    purchases = Purchase.query.filter_by(user_id=current_user_id).all()
-    return jsonify([purchase.to_dict() for purchase in purchases])
-
-@api.route('/purchases/<int:id>', methods=['DELETE'])
-@jwt_required()
-def delete_purchase(id):
-    current_user_id = get_jwt_identity()
-    purchase = Purchase.query.filter_by(id=id, user_id=current_user_id).first()
-
-    if not purchase:
-        return jsonify({'error': 'Purchase not found'}), 404
-
-    db.session.delete(purchase)
-    db.session.commit()
-    return '', 204
 
 @api.route('/recommendations/<int:id>', methods=['GET'])
 def get_recommendations(id):
