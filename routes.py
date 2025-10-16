@@ -17,13 +17,44 @@ def get_product(id):
 @api.route('/products', methods=['POST'])
 def create_product():
     data = request.get_json()
+
+    # Validate required fields
+    if not data or 'name' not in data or 'price' not in data:
+        return jsonify({'error': 'Name and price are required'}), 400
+
+    try:
+        price = float(data['price'])
+        if price < 0:
+            return jsonify({'error': 'Price must be non-negative'}), 400
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Price must be a valid number'}), 400
+
+    # Validate optional numeric fields
+    sustainability_score = data.get('sustainability_score')
+    if sustainability_score is not None:
+        try:
+            sustainability_score = int(sustainability_score)
+            if not (1 <= sustainability_score <= 10):
+                return jsonify({'error': 'Sustainability score must be between 1 and 10'}), 400
+        except (ValueError, TypeError):
+            return jsonify({'error': 'Sustainability score must be a valid integer'}), 400
+
+    carbon_footprint = data.get('carbon_footprint')
+    if carbon_footprint is not None:
+        try:
+            carbon_footprint = float(carbon_footprint)
+            if carbon_footprint < 0:
+                return jsonify({'error': 'Carbon footprint must be non-negative'}), 400
+        except (ValueError, TypeError):
+            return jsonify({'error': 'Carbon footprint must be a valid number'}), 400
+
     product = Product(
         name=data['name'],
         description=data.get('description'),
-        price=data['price'],
+        price=price,
         category=data.get('category'),
-        sustainability_score=data.get('sustainability_score'),
-        carbon_footprint=data.get('carbon_footprint')
+        sustainability_score=sustainability_score,
+        carbon_footprint=carbon_footprint
     )
     db.session.add(product)
     db.session.commit()

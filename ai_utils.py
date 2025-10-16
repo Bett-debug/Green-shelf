@@ -1,10 +1,13 @@
-import openai
+from openai import OpenAI
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-openai.api_key = os.getenv('OPENAI_API_KEY')
+# Initialize OpenAI client only if API key is available
+client = None
+if os.getenv('OPENAI_API_KEY'):
+    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 def get_sustainability_recommendations(product):
     """
@@ -28,8 +31,11 @@ def get_sustainability_recommendations(product):
     Format as a list of actionable recommendations.
     """
 
+    if not client:
+        return ["OpenAI API key not configured. Please set OPENAI_API_KEY environment variable."]
+
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a sustainability expert providing practical recommendations."},
