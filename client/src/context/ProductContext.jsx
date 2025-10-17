@@ -1,47 +1,48 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from "react";
+import { products as api } from "../api";
 
-export const ProductContext = createContext();
+export const ProductContext = createContext({
+  products: [],
+  reload: async () => {},
+  add: async () => {},
+  update: async () => {},
+  remove: async () => {}
+});
 
-export const ProductProvider = ({ children }) => {
+export function ProductProvider({ children }) {
   const [products, setProducts] = useState([]);
-  const baseUrl = "http://127.0.0.1:5000/api/products";
 
-  const fetchProducts = async () => {
-    const res = await fetch(baseUrl);
-    const data = await res.json();
-    setProducts(data);
-  };
-
-  const addProduct = async (product) => {
-    const res = await fetch(baseUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(product),
-    });
-    if (res.ok) fetchProducts();
-  };
-
-  const updateProduct = async (id, updated) => {
-    const res = await fetch(`${baseUrl}/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updated),
-    });
-    if (res.ok) fetchProducts();
-  };
-
-  const deleteProduct = async (id) => {
-    await fetch(`${baseUrl}/${id}`, { method: "DELETE" });
-    fetchProducts();
-  };
+  async function reload() {
+    try {
+      const data = await api.list();
+      setProducts(data);
+    } catch (e) {
+      console.error("Failed to load products", e);
+    }
+  }
 
   useEffect(() => {
-    fetchProducts();
+    reload();
   }, []);
 
+  async function add(payload) {
+    await api.create(payload);
+    await reload();
+  }
+
+  async function update(id, payload) {
+    await api.update(id, payload);
+    await reload();
+  }
+
+  async function remove(id) {
+    await api.remove(id);
+    setProducts((s) => s.filter((p) => p.id !== id));
+  }
+
   return (
-    <ProductContext.Provider value={{ products, addProduct, updateProduct, deleteProduct }}>
+    <ProductContext.Provider value={{ products, reload, add, update, remove }}>
       {children}
     </ProductContext.Provider>
   );
-};
+}

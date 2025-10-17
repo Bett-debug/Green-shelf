@@ -29,7 +29,7 @@ const ProductForm = ({ onSubmit, initialData = {} }) => {
           required={key === 'name' || key === 'price'}
         />
       ))}
-      <button type="submit">Save</button>
+      <button type="submit" className="bg-[#4ecdc4] hover:bg-[#ff6b6b] text-white font-semibold px-6 py-2 rounded-2xl shadow-md transition-all"> Save</button>
     </form>
   );
 };
