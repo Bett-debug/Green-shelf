@@ -4,47 +4,49 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Initialize OpenAI client only if API key is available
 client = None
-if os.getenv('OPENAI_API_KEY'):
-    client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+if os.getenv("OPENAI_API_KEY"):
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def get_sustainability_recommendations(product):
     """
-    Use OpenAI to generate sustainability recommendations for a product.
+    Generate sustainability recommendations for a given product using OpenAI.
     """
+    if not client:
+        return ["OpenAI API key not configured. Please set OPENAI_API_KEY in your .env file."]
+
     prompt = f"""
-    Based on the following product information, provide 3-5 specific sustainability recommendations:
+    You are a sustainability expert. Based on the following product details, give 3–5 practical recommendations
+    to improve its environmental impact.
 
     Product Name: {product.name}
-    Description: {product.description or 'No description available'}
+    Description: {product.description or 'No description provided'}
     Category: {product.category or 'Uncategorized'}
-    Current Sustainability Score: {product.sustainability_score or 'Not rated'}/10
-    Carbon Footprint: {product.carbon_footprint or 'Unknown'} kg CO2
+    Sustainability Score: {product.sustainability_score or 'Not rated'}/10
+    Carbon Footprint: {product.carbon_footprint or 'Unknown'} kg CO₂
 
-    Recommendations should focus on:
-    - Reducing carbon footprint
-    - Improving sustainability score
-    - Alternative materials or production methods
-    - Consumer usage tips
+    Focus on:
+    - Reducing carbon emissions
+    - Sustainable materials or production
+    - Eco-friendly packaging
+    - Consumer use and disposal tips
 
-    Format as a list of actionable recommendations.
+    Format as a simple list.
     """
-
-    if not client:
-        return ["OpenAI API key not configured. Please set OPENAI_API_KEY environment variable."]
 
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "You are a sustainability expert providing practical recommendations."},
+                {"role": "system", "content": "You are an expert in sustainability and product design."},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=300,
             temperature=0.7
         )
-        recommendations = response.choices[0].message.content.strip().split('\n')
-        return [rec.strip('- ').strip() for rec in recommendations if rec.strip()]
+
+        content = response.choices[0].message.content.strip()
+        return [line.strip("-• ").strip() for line in content.split("\n") if line.strip()]
+
     except Exception as e:
         return [f"Error generating recommendations: {str(e)}"]

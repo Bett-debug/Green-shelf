@@ -1,21 +1,26 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import ProductDetails from './pages/ProductDetails';
+import Products from './pages/Products';
+import ProductDetail from './pages/ProductDetail';
 import AddProduct from './pages/AddProduct';
 import EditProduct from './pages/EditProduct';
-import TagsPage from './pages/TagsPage';
+import Recommendations from './pages/Recommendations';
 
 function App() {
   return (
-    <Router>
+    <div>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/add" element={<AddProduct />} />
         <Route path="/edit/:id" element={<EditProduct />} />
-        <Route path="/tags" element={<TagsPage />} />
+        <Route path="/recommendations/:id" element={<Recommendations />} />
       </Routes>
-    </Router>
+    </div>
   );
 }
 
