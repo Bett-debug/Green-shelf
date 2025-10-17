@@ -1,22 +1,22 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import Home from './pages/Home'
-import ProductDetails from './pages/ProductDetails'
-import ProductForm from './pages/ProductForm'
-import Header from './components/Header'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import ProductDetails from './pages/ProductDetails';
+import AddProduct from './pages/AddProduct';
+import EditProduct from './pages/EditProduct';
+import TagsPage from './pages/TagsPage';
 
-
-export default function App() {
-return (
-<div className="min-h-screen bg-gray-50">
-<Header />
-<main className="container mx-auto p-4">
-<Routes>
-<Route path="/" element={<Home />} />
-<Route path="/products/new" element={<ProductForm />} />
-<Route path="/products/:id" element={<ProductDetails />} />
-</Routes>
-</main>
-</div>
-)
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/add" element={<AddProduct />} />
+        <Route path="/edit/:id" element={<EditProduct />} />
+        <Route path="/tags" element={<TagsPage />} />
+      </Routes>
+    </Router>
+  );
 }
+
+export default App;
