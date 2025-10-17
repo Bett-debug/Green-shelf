@@ -1,5 +1,3 @@
-
-// small wrapper around fetch to call your Flask API
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
 
