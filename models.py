@@ -25,6 +25,7 @@ class Product(db.Model):
     category = db.Column(db.String(50), nullable=True)
     sustainability_score = db.Column(db.Integer, nullable=True)
     carbon_footprint = db.Column(db.Float, nullable=True)
+    image_url = db.Column(db.String(255), nullable=True)  # ✅ NEW FIELD
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     tags = db.relationship('Tag', secondary=product_tags, back_populates='products')
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
@@ -38,10 +39,12 @@ class Product(db.Model):
             'category': self.category,
             'sustainability_score': self.sustainability_score,
             'carbon_footprint': self.carbon_footprint,
+            'image_url': self.image_url,  # ✅ Include in JSON response
             'user_id': self.user_id,
-            'tags': [tag.name for tag in self.tags],
+            'tags': [tag.to_dict() for tag in self.tags],  # return full tag info, not just names
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
+
 
 
 class Tag(db.Model):

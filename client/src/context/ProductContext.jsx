@@ -1,47 +1,77 @@
-import React, { createContext, useState, useEffect } from "react";
-import { products as api } from "../api";
+// src/context/ProductContext.jsx
+import React, { createContext, useEffect, useState } from "react";
+import { products as productsApi } from "../api";
 
 export const ProductContext = createContext({
   products: [],
-  reload: async () => {},
-  add: async () => {},
-  update: async () => {},
-  remove: async () => {}
+  add: async (p) => {},
+  deleteProduct: async (id) => {},
+  refresh: async () => {},
 });
 
 export function ProductProvider({ children }) {
   const [products, setProducts] = useState([]);
 
-  async function reload() {
+  async function refresh() {
     try {
-      const data = await api.list();
-      setProducts(data);
+      const list = await productsApi.list();
+      setProducts(list || []);
     } catch (e) {
-      console.error("Failed to load products", e);
+      console.error("Failed to load products from API, falling back to empty list.", e);
+      setProducts([]);
     }
   }
 
   useEffect(() => {
-    reload();
+    refresh();
+    // eslint-disable-next-line
   }, []);
 
-  async function add(payload) {
-    await api.create(payload);
-    await reload();
+  async function add(product) {
+    // try to create via API, otherwise update local state
+    try {
+      if (productsApi.create) {
+        const created = await productsApi.create(product);
+        await refresh();
+        return created;
+      }
+    } catch (e) {
+      console.error("API create failed", e);
+    }
+    // fallback: add locally with temporary id
+    const id = Date.now();
+    setProducts((p) => [{ ...product, id }, ...p]);
+    return { ...product, id };
   }
 
-  async function update(id, payload) {
-    await api.update(id, payload);
-    await reload();
+  async function update(id, data) {
+    try {
+      if (productsApi.update) {
+        const updated = await productsApi.update(id, data);
+        await refresh();
+        return updated;
+      }
+    } catch (e) {
+      console.error("API update failed", e);
+    }
+    setProducts((p) => p.map((it) => (String(it.id) === String(id) ? { ...it, ...data } : it)));
   }
 
-  async function remove(id) {
-    await api.remove(id);
-    setProducts((s) => s.filter((p) => p.id !== id));
+  async function deleteProduct(id) {
+    try {
+      if (productsApi.delete) {
+        await productsApi.delete(id);
+        await refresh();
+        return;
+      }
+    } catch (e) {
+      console.error("API delete failed", e);
+    }
+    setProducts((p) => p.filter((it) => String(it.id) !== String(id)));
   }
 
   return (
-    <ProductContext.Provider value={{ products, reload, add, update, remove }}>
+    <ProductContext.Provider value={{ products, add, update, deleteProduct, refresh }}>
       {children}
     </ProductContext.Provider>
   );

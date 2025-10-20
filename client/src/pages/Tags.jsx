@@ -1,41 +1,32 @@
+
 import React, { useEffect, useState } from "react";
 import { tags as tagsApi } from "../api";
+import { Link } from "react-router-dom";
 
 export default function Tags() {
   const [tags, setTags] = useState([]);
-  const [name, setName] = useState("");
 
-  useEffect(() => { tagsApi.list().then(setTags).catch(() => {}); }, []);
-
-  async function create() {
-    if (!name.trim()) return;
-    try {
-      const t = await tagsApi.create({ name });
-      setTags(s => [...s, t]);
-      setName("");
-    } catch (e) { alert("Failed to create tag"); }
-  }
-
-  async function remove(id) {
-    if (!confirm("Delete tag?")) return;
-    try { await tagsApi.remove(id); setTags(s => s.filter(t => t.id !== id)); } catch { alert("Failed to delete"); }
-  }
+  useEffect(() => {
+    tagsApi
+      .list()
+      .then((list) => setTags(list || []))
+      .catch(() => setTags([]));
+  }, []);
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Tags</h2>
-      <div className="mb-4 flex gap-2">
-        <input value={name} onChange={e => setName(e.target.value)} placeholder="New tag name" className="border px-3 py-2 rounded" />
-        <button onClick={create} className="bg-brand-500 text-white px-4 py-2 rounded">Create</button>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {tags.map(t => (
-          <div key={t.id} className="card flex items-center justify-between">
-            <div>{t.name}</div>
-            <div><button onClick={() => remove(t.id)} className="text-red-600">Delete</button></div>
-          </div>
-        ))}
+    <div className="max-w-6xl mx-auto p-6">
+      <h2 className="text-2xl font-semibold text-emerald-700 mb-4">Tags</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        {tags.length === 0 ? (
+          <div className="text-gray-500">No tags found.</div>
+        ) : (
+          tags.map((t) => (
+            <Link key={t.id} to={`/products?tag=${t.id}`} className="block p-3 bg-white rounded-lg border border-gray-100 hover:shadow-sm">
+              <div className="text-sm font-medium text-gray-800">{t.name}</div>
+              <div className="text-xs text-gray-500 mt-1">View products</div>
+            </Link>
+          ))
+        )}
       </div>
     </div>
   );
