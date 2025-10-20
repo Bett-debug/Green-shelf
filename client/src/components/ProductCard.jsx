@@ -6,14 +6,14 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition transform hover:-translate-y-1 p-4">
-      {/* Product Image */}
+      
       <img
         src={product.image_url || placeholder}
         alt={product.name}
         className="w-full h-40 object-cover rounded-lg mb-3"
       />
 
-      {/* Product Name + Eco Score */}
+      
       <div className="flex justify-between items-start">
         <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
         {product.sustainability_score && (
@@ -23,21 +23,21 @@ const ProductCard = ({ product }) => {
         )}
       </div>
 
-      {/* Price */}
+      
       {product.price && (
         <p className="text-emerald-600 font-bold mt-1">
-          ${Number(product.price).toFixed(2)}
+          Ksh {Number(product.price).toFixed(2)}
         </p>
       )}
 
-      {/* Description */}
+      
       {product.description && (
         <p className="text-sm text-gray-600 mt-1 line-clamp-2">
           {product.description}
         </p>
       )}
 
-      {/* View Details */}
+      
       <Link
         to={`/products/${product.id}`}
         className="mt-4 block w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg text-sm transition"

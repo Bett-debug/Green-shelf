@@ -48,7 +48,7 @@ const ProductDetail = () => {
       </h1>
       <p className="text-gray-600 mt-1">{product.category}</p>
       <p className="text-emerald-600 font-bold mt-2 text-lg">
-        ${Number(product.price).toFixed(2)}
+        Ksh {Number(product.price).toFixed(2)}
       </p>
 
       <p className="text-gray-700 mt-4">{product.description}</p>
