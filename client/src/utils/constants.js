@@ -1,3 +1,6 @@
+// API Base URL
+export const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000/api";
+
 // Product Categories for Green Shelf
 export const PRODUCT_CATEGORIES = [
   { value: 'Personal Care', label: 'Personal Care' },

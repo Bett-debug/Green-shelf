@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from models import db, User, Product, Purchase, Tag, Review
-from ai_utils import get_sustainability_recommendations
+from ai_utils import get_sustainability_recommendations, get_ai_chat_response
 from auth_utils import admin_required, shopper_required, get_current_user
 
 api = Blueprint('api', __name__)
@@ -217,6 +217,39 @@ def get_recommendations(id):
     product = Product.query.get_or_404(id)
     recommendations = get_sustainability_recommendations(product)
     return jsonify(recommendations)
+
+
+# ---------------- AI Chat ----------------
+
+@api.route('/chat', methods=['POST'])
+def chat():
+    """
+    AI Chat endpoint for sustainability questions and product recommendations
+    Body: {
+        "message": "user's message",
+        "conversation_history": [optional array of previous messages]
+    }
+    """
+    data = request.get_json()
+    
+    if not data or 'message' not in data:
+        return jsonify({'error': 'Message is required'}), 400
+    
+    user_message = data['message'].strip()
+    if not user_message:
+        return jsonify({'error': 'Message cannot be empty'}), 400
+    
+    # Get conversation history if provided
+    conversation_history = data.get('conversation_history', [])
+    
+    # Get AI response
+    ai_response = get_ai_chat_response(user_message, conversation_history)
+    
+    from datetime import datetime
+    return jsonify({
+        'response': ai_response,
+        'timestamp': datetime.utcnow().isoformat()
+    }), 200
 
 
 # ---------------- Tags ----------------
