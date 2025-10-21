@@ -32,7 +32,7 @@ const Login = () => {
       
       // Redirect based on role
       if (response.user.role === 'admin') {
-        navigate('/products');
+        navigate('/dashboard');
       } else {
         navigate('/');
       }

@@ -13,23 +13,24 @@ const Navbar = () => {
 
   // Define navigation links based on role
   const getNavLinks = () => {
-    const baseLinks = [
-      { to: "/", label: "Home" },
-      { to: "/products", label: "Products" },
-      { to: "/tags", label: "Tags" },
-      { to: "/recommendations", label: "Recommendations" },
-      { to: "/chat", label: "AI Chat" },
-    ];
-
-    // Add admin-only links
+    // Admin navigation - focused on management
     if (isAdmin()) {
       return [
-        ...baseLinks,
+        { to: "/dashboard", label: "Dashboard" },
+        { to: "/products", label: "Products" },
         { to: "/add", label: "Add Product" },
+        { to: "/tags", label: "Tags" },
       ];
     }
 
-    return baseLinks;
+    // Shopper navigation - focused on shopping experience
+    return [
+      { to: "/", label: "Home" },
+      { to: "/products", label: "Shop" },
+      { to: "/tags", label: "Categories" },
+      { to: "/recommendations", label: "Recommendations" },
+      { to: "/chat", label: "AI Assistant" },
+    ];
   };
 
   return (

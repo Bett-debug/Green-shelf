@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { PRODUCT_CATEGORIES } from "../utils/constants";
 
 const ProductForm = ({ onSubmit, initialData = {} }) => {
   const [formData, setFormData] = useState({
@@ -59,26 +60,106 @@ const ProductForm = ({ onSubmit, initialData = {} }) => {
         )}
       </div>
 
-      {/* Text Fields */}
-      {[
-        { name: "name", type: "text", placeholder: "Product Name", required: true },
-        { name: "description", type: "text", placeholder: "Description" },
-        { name: "price", type: "number", placeholder: "Price ($)", required: true },
-        { name: "category", type: "text", placeholder: "Category" },
-        { name: "sustainability_score", type: "number", placeholder: "Sustainability Score (1–10)" },
-        { name: "carbon_footprint", type: "number", placeholder: "Carbon Footprint (kg CO₂)" },
-      ].map((field) => (
+      {/* Product Name */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Product Name *
+        </label>
         <input
-          key={field.name}
-          name={field.name}
-          type={field.type}
-          placeholder={field.placeholder}
-          value={formData[field.name]}
+          name="name"
+          type="text"
+          placeholder="Enter product name"
+          value={formData.name}
           onChange={handleChange}
-          required={field.required}
+          required
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring focus:ring-emerald-200 outline-none"
         />
-      ))}
+      </div>
+
+      {/* Description */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Description
+        </label>
+        <textarea
+          name="description"
+          placeholder="Enter product description"
+          value={formData.description}
+          onChange={handleChange}
+          rows="3"
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring focus:ring-emerald-200 outline-none"
+        />
+      </div>
+
+      {/* Price */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Price ($) *
+        </label>
+        <input
+          name="price"
+          type="number"
+          step="0.01"
+          placeholder="0.00"
+          value={formData.price}
+          onChange={handleChange}
+          required
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring focus:ring-emerald-200 outline-none"
+        />
+      </div>
+
+      {/* Category Dropdown */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Category
+        </label>
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring focus:ring-emerald-200 outline-none"
+        >
+          <option value="">Select a category</option>
+          {PRODUCT_CATEGORIES.map((cat) => (
+            <option key={cat.value} value={cat.value}>
+              {cat.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Sustainability Score */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Sustainability Score (1-10)
+        </label>
+        <input
+          name="sustainability_score"
+          type="number"
+          min="1"
+          max="10"
+          placeholder="Rate 1-10"
+          value={formData.sustainability_score}
+          onChange={handleChange}
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring focus:ring-emerald-200 outline-none"
+        />
+      </div>
+
+      {/* Carbon Footprint */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Carbon Footprint (kg CO₂)
+        </label>
+        <input
+          name="carbon_footprint"
+          type="number"
+          step="0.01"
+          placeholder="0.00"
+          value={formData.carbon_footprint}
+          onChange={handleChange}
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring focus:ring-emerald-200 outline-none"
+        />
+      </div>
 
       {/* Save Button */}
       <button

@@ -17,6 +17,7 @@ import UserPage from "./pages/UserPage";
 import AIChatPage from "./pages/AIChatPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
 
 import { ProductProvider } from "./context/ProductContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -45,6 +46,14 @@ const App = () => {
               <Route path="/register" element={<Register />} />
               
               {/* Protected Routes - Admin Only */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/add"
                 element={
