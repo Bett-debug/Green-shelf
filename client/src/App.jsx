@@ -33,17 +33,47 @@ const App = () => {
           
           <main className="min-h-screen bg-gray-50">
             <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<Home />} />
+              {/* Public Routes - Only Products and Auth */}
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductDetail />} />
-              <Route path="/tags" element={<Tags />} />
-              <Route path="/recommendations" element={<Recommendations />} />
-              <Route path="/chat" element={<AIChatPage />} />
               
               {/* Auth Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              
+              {/* Protected Routes - Require Authentication */}
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/tags"
+                element={
+                  <ProtectedRoute>
+                    <Tags />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/recommendations"
+                element={
+                  <ProtectedRoute>
+                    <Recommendations />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/chat"
+                element={
+                  <ProtectedRoute>
+                    <AIChatPage />
+                  </ProtectedRoute>
+                }
+              />
               
               {/* Protected Routes - Admin Only */}
               <Route
