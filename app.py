@@ -6,8 +6,9 @@ import os
 
 load_dotenv()
 
-from db import init_db
+from db import db, init_db
 from routes import register_routes
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'fallback-secret-key')
@@ -15,10 +16,12 @@ app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'fallback-secret-key'
 CORS(app)
 jwt = JWTManager(app)
 
-# Initialize database
 init_db(app)
 
-# Register routes
+
+migrate = Migrate(app, db)
+
+
 register_routes(app)
 
 if __name__ == '__main__':
