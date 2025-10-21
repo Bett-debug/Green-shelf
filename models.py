@@ -8,6 +8,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    products = db.relationship('Product', backref='creator', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -50,16 +51,6 @@ product_tags = db.Table(
     db.Column('product_id', db.Integer, db.ForeignKey('product.id'), primary_key=True),
     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True)
 )
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    products = db.relationship('Product', backref='creator', lazy=True)
-
-    def to_dict(self):
-        return {'id': self.id, 'username': self.username, 'email': self.email}
-
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
