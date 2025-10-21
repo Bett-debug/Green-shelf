@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from models import db, User, Product, Purchase, Tag, Review
 from ai_utils import get_sustainability_recommendations
+from auth_utils import admin_required, shopper_required, get_current_user
 
 api = Blueprint('api', __name__)
 
@@ -18,7 +19,13 @@ def get_product(id):
     return jsonify(product.to_dict())
 
 @api.route('/products', methods=['POST'])
+@jwt_required()
+@admin_required()
 def create_product():
+    """
+    Create a new product (Admin only)
+    Requires: JWT token with admin role
+    """
     data = request.get_json()
     if not data or 'name' not in data or 'price' not in data:
         return jsonify({'error': 'Name and price are required'}), 400
@@ -30,13 +37,16 @@ def create_product():
     except (ValueError, TypeError):
         return jsonify({'error': 'Invalid price'}), 400
 
+    current_user = get_current_user()
     product = Product(
         name=data['name'],
         description=data.get('description'),
         price=price,
         category=data.get('category'),
         sustainability_score=data.get('sustainability_score'),
-        carbon_footprint=data.get('carbon_footprint')
+        carbon_footprint=data.get('carbon_footprint'),
+        image_url=data.get('image_url'),
+        user_id=current_user.id
     )
 
     db.session.add(product)
@@ -44,27 +54,48 @@ def create_product():
     return jsonify(product.to_dict()), 201
 
 @api.route('/products/<int:id>', methods=['PUT'])
+@jwt_required()
+@admin_required()
 def update_product(id):
+    """
+    Update a product (Admin only)
+    Requires: JWT token with admin role
+    """
     product = Product.query.get_or_404(id)
     data = request.get_json()
-    for field in ['name', 'description', 'price', 'category', 'sustainability_score', 'carbon_footprint']:
+    for field in ['name', 'description', 'price', 'category', 'sustainability_score', 'carbon_footprint', 'image_url']:
         if field in data:
             setattr(product, field, data[field])
     db.session.commit()
     return jsonify(product.to_dict())
 
 @api.route('/products/<int:id>', methods=['DELETE'])
+@jwt_required()
+@admin_required()
 def delete_product(id):
+    """
+    Delete a product (Admin only)
+    Requires: JWT token with admin role
+    """
     product = Product.query.get_or_404(id)
     db.session.delete(product)
     db.session.commit()
-    return '', 204
+    return jsonify({'message': 'Product deleted successfully'}), 200
 
 @api.route('/users/register', methods=['POST'])
 def register_user():
+    """
+    Register a new user with role (shopper or admin)
+    Body: {username, email, password, role (optional, defaults to 'shopper')}
+    """
     data = request.get_json()
     if not data or not all(k in data for k in ('username', 'email', 'password')):
         return jsonify({'error': 'Username, email, and password are required'}), 400
+    
+    # Validate role
+    role = data.get('role', 'shopper').lower()
+    if role not in ['shopper', 'admin']:
+        return jsonify({'error': 'Role must be either "shopper" or "admin"'}), 400
     
     # Check for existing username or email
     if User.query.filter_by(username=data['username']).first():
@@ -73,15 +104,26 @@ def register_user():
         return jsonify({'error': 'Email already registered'}), 400
     
     # Create and save user
-    user = User(username=data['username'], email=data['email'])
+    user = User(username=data['username'], email=data['email'], role=role)
     user.set_password(data['password'])
     db.session.add(user)
     db.session.commit()
     
-    return jsonify(user.to_dict()), 201
+    # Create access token
+    access_token = create_access_token(identity=str(user.id))
+    
+    return jsonify({
+        'message': 'User registered successfully',
+        'access_token': access_token,
+        'user': user.to_dict()
+    }), 201
 
 @api.route('/users/login', methods=['POST'])
 def login_user():
+    """
+    Login user and return JWT token
+    Body: {username, password}
+    """
     data = request.get_json()
     if not data or not all(k in data for k in ('username', 'password')):
         return jsonify({'error': 'Username and password are required'}), 400
@@ -90,11 +132,33 @@ def login_user():
     if not user or not user.check_password(data['password']):
         return jsonify({'error': 'Invalid username or password'}), 401
     
+    # Check if account is active
+    if not user.is_active:
+        return jsonify({'error': 'Account is inactive. Please contact support.'}), 403
+    
     access_token = create_access_token(identity=str(user.id))
-    return jsonify({'access_token': access_token, 'user': user.to_dict()}), 200
+    return jsonify({
+        'message': 'Login successful',
+        'access_token': access_token,
+        'user': user.to_dict()
+    }), 200
+
+@api.route('/users/me', methods=['GET'])
+@jwt_required()
+def get_current_user_info():
+    """
+    Get current authenticated user's information
+    Requires: JWT token in Authorization header
+    """
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    
+    return jsonify(user.to_dict()), 200
 
 @api.route('/purchases', methods=['POST'])
 @jwt_required()
+@shopper_required()
 def create_purchase():
     data = request.get_json()
     if not data or 'product_id' not in data:
@@ -163,10 +227,22 @@ def get_tags():
     return jsonify([t.to_dict() for t in tags])
 
 @api.route('/tags', methods=['POST'])
+@jwt_required()
+@admin_required()
 def create_tag():
+    """
+    Create a new tag (Admin only)
+    Requires: JWT token with admin role
+    """
     data = request.get_json()
     if not data or 'name' not in data:
         return jsonify({'error': 'Tag name required'}), 400
+    
+    # Check if tag already exists
+    existing_tag = Tag.query.filter_by(name=data['name']).first()
+    if existing_tag:
+        return jsonify({'error': 'Tag already exists'}), 400
+    
     tag = Tag(name=data['name'])
     db.session.add(tag)
     db.session.commit()
