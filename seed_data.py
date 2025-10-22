@@ -116,7 +116,7 @@ def seed_database():
                 tags=[tags[2], tags[4]]
             ),
 
-            # Kitchen & Dining Category
+            
             Product(
                 name="Reusable Water Bottle",
                 description="Durable stainless steel bottle that keeps drinks cool for 12 hours.",

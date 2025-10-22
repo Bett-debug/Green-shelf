@@ -45,7 +45,7 @@ class Purchase(db.Model):
     quantity = db.Column(db.Integer, default=1)
     purchased_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    # Relationships
+    
     user = db.relationship('User', backref=db.backref('purchases', lazy=True))
     product = db.relationship('Product', backref=db.backref('purchases', lazy=True))
 
