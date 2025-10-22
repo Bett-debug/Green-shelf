@@ -8,7 +8,7 @@ def seed_database():
 
         
         user = User(username="EcoGuru", email="eco@example.com")
-        user.set_password("password123")  # Set a password for the user
+        user.set_password("password123")  
         db.session.add(user)
 
         
@@ -22,13 +22,9 @@ def seed_database():
         db.session.add_all(tags)
         db.session.commit()
 
-<<<<<<< HEAD
         
-=======
-        # Create products organized by categories
->>>>>>> sam-fronend
         products = [
-            # Personal Care Category
+            
             Product(
                 name="Bamboo Toothbrush",
                 description="Eco-friendly toothbrush made from natural bamboo.",
@@ -36,14 +32,14 @@ def seed_database():
                 category="Personal Care",
                 sustainability_score=9,
                 carbon_footprint=0.5,
-                image_url="https://images.unsplash.com/photo-1617993669588-3440909d7316?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGJhbWJvbyUyMHRvb3RoYnJ1c2h8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500",
+                image_url="https://images.unsplash.com/photo-1617993669588-3440909d7316",
                 creator=user,
                 tags=[tags[0], tags[1]]
             ),
             Product(
                 name="Natural Soap Bar",
                 description="Handmade soap with organic ingredients and zero plastic packaging.",
-                price=6.99,
+                price=699,
                 category="Personal Care",
                 sustainability_score=9,
                 carbon_footprint=0.3,
@@ -54,7 +50,7 @@ def seed_database():
             Product(
                 name="Bamboo Cotton Swabs",
                 description="Biodegradable cotton swabs with bamboo sticks.",
-                price=3.49,
+                price=349,
                 category="Personal Care",
                 sustainability_score=8,
                 carbon_footprint=0.2,
@@ -65,7 +61,7 @@ def seed_database():
             Product(
                 name="Reusable Makeup Remover Pads",
                 description="Soft organic cotton pads that can be washed and reused.",
-                price=8.99,
+                price=899,
                 category="Personal Care",
                 sustainability_score=10,
                 carbon_footprint=0.4,
@@ -73,8 +69,8 @@ def seed_database():
                 creator=user,
                 tags=[tags[0], tags[4]]
             ),
+
             
-            # Electronics Category
             Product(
                 name="Solar Charger",
                 description="Portable solar charger ideal for camping or travel.",
@@ -89,7 +85,7 @@ def seed_database():
             Product(
                 name="Solar Powered Lamp",
                 description="Energy-efficient lamp powered entirely by solar energy.",
-                price=25.00,
+                price=2500,
                 category="Electronics",
                 sustainability_score=10,
                 carbon_footprint=0.1,
@@ -100,7 +96,7 @@ def seed_database():
             Product(
                 name="LED Smart Bulb",
                 description="Energy-efficient LED bulb with smart home integration.",
-                price=15.99,
+                price=1599,
                 category="Electronics",
                 sustainability_score=9,
                 carbon_footprint=2.5,
@@ -111,7 +107,7 @@ def seed_database():
             Product(
                 name="Rechargeable Battery Pack",
                 description="High-capacity rechargeable batteries to reduce waste.",
-                price=29.99,
+                price=2999,
                 category="Electronics",
                 sustainability_score=8,
                 carbon_footprint=5.0,
@@ -119,23 +115,23 @@ def seed_database():
                 creator=user,
                 tags=[tags[2], tags[4]]
             ),
-            
+
             # Kitchen & Dining Category
             Product(
                 name="Reusable Water Bottle",
                 description="Durable stainless steel bottle that keeps drinks cool for 12 hours.",
-                price=19.99,
+                price=1999,
                 category="Kitchen & Dining",
                 sustainability_score=10,
                 carbon_footprint=0.2,
-                image_url="https://images.unsplash.com/photo-1623684194967-48075185a58c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
+                image_url="https://images.unsplash.com/photo-1623684194967-48075185a58c",
                 creator=user,
                 tags=[tags[0], tags[4]]
             ),
             Product(
                 name="Bamboo Cutlery Set",
                 description="Portable bamboo utensils perfect for on-the-go meals.",
-                price=9.99,
+                price=999,
                 category="Kitchen & Dining",
                 sustainability_score=9,
                 carbon_footprint=0.3,
@@ -146,7 +142,7 @@ def seed_database():
             Product(
                 name="Beeswax Food Wraps",
                 description="Reusable alternative to plastic wrap made from organic cotton and beeswax.",
-                price=14.99,
+                price=1499,
                 category="Kitchen & Dining",
                 sustainability_score=10,
                 carbon_footprint=0.5,
@@ -155,20 +151,9 @@ def seed_database():
                 tags=[tags[0], tags[4], tags[3]]
             ),
             Product(
-                name="Stainless Steel Straws",
-                description="Set of 4 reusable metal straws with cleaning brush.",
-                price=7.99,
-                category="Kitchen & Dining",
-                sustainability_score=10,
-                carbon_footprint=0.2,
-                image_url="https://images.unsplash.com/photo-1591088398332-8a7791972843",
-                creator=user,
-                tags=[tags[0], tags[4]]
-            ),
-            Product(
                 name="Compost Bin",
                 description="Countertop compost bin with charcoal filter to reduce odors.",
-                price=34.99,
+                price=3499,
                 category="Kitchen & Dining",
                 sustainability_score=9,
                 carbon_footprint=3.0,
@@ -176,49 +161,34 @@ def seed_database():
                 creator=user,
                 tags=[tags[0], tags[1]]
             ),
-            
+
             # Home & Garden Category
             Product(
                 name="Organic Cotton Tote Bag",
                 description="Reusable shopping bag made from 100% organic cotton.",
-<<<<<<< HEAD
                 price=1249,
-                category="Organic",
-=======
-                price=12.49,
                 category="Home & Garden",
->>>>>>> sam-fronend
                 sustainability_score=8,
                 carbon_footprint=0.7,
-                image_url="https://images.unsplash.com/photo-1683148754073-cfa906017a10?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
+                image_url="https://images.unsplash.com/photo-1683148754073-cfa906017a10",
                 creator=user,
                 tags=[tags[0], tags[3]]
             ),
             Product(
-<<<<<<< HEAD
-                name="Solar Powered Lamp",
-                description="Energy-efficient lamp powered entirely by solar energy.",
-                price=2500,
-                category="Energy Saving",
-                sustainability_score=10,
-                carbon_footprint=0.1,
-                image_url="https://images.unsplash.com/photo-1601642964568-1917224f4e4d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
-=======
                 name="Recycled Plastic Planter",
                 description="Stylish planter made from 100% recycled ocean plastic.",
-                price=18.99,
+                price=1899,
                 category="Home & Garden",
                 sustainability_score=9,
                 carbon_footprint=1.5,
                 image_url="https://images.unsplash.com/photo-1485955900006-10f4d324d411",
->>>>>>> sam-fronend
                 creator=user,
                 tags=[tags[0], tags[1]]
             ),
             Product(
                 name="Organic Herb Garden Kit",
                 description="Complete kit to grow your own organic herbs at home.",
-                price=24.99,
+                price=2499,
                 category="Home & Garden",
                 sustainability_score=10,
                 carbon_footprint=0.8,
@@ -237,12 +207,12 @@ def seed_database():
                 creator=user,
                 tags=[tags[0]]
             ),
+
             
-            # Fashion & Accessories Category
             Product(
                 name="Organic Cotton T-Shirt",
                 description="Comfortable t-shirt made from 100% organic cotton.",
-                price=22.99,
+                price=2299,
                 category="Fashion & Accessories",
                 sustainability_score=8,
                 carbon_footprint=1.2,
@@ -264,7 +234,7 @@ def seed_database():
             Product(
                 name="Cork Wallet",
                 description="Stylish and sustainable wallet made from natural cork.",
-                price=28.99,
+                price=2899,
                 category="Fashion & Accessories",
                 sustainability_score=9,
                 carbon_footprint=0.6,
@@ -272,12 +242,12 @@ def seed_database():
                 creator=user,
                 tags=[tags[0]]
             ),
+
             
-            # Cleaning & Household Category
             Product(
                 name="Eco-Friendly Dish Soap",
                 description="Plant-based dish soap that's tough on grease, gentle on the planet.",
-                price=5.99,
+                price=599,
                 category="Cleaning & Household",
                 sustainability_score=9,
                 carbon_footprint=0.4,
@@ -288,7 +258,7 @@ def seed_database():
             Product(
                 name="Reusable Cleaning Cloths",
                 description="Set of 6 microfiber cloths that replace paper towels.",
-                price=11.99,
+                price=1199,
                 category="Cleaning & Household",
                 sustainability_score=10,
                 carbon_footprint=0.5,
@@ -299,20 +269,20 @@ def seed_database():
             Product(
                 name="Natural All-Purpose Cleaner",
                 description="Non-toxic cleaner made from plant-based ingredients.",
-                price=8.99,
+                price=899,
                 category="Cleaning & Household",
                 sustainability_score=9,
                 carbon_footprint=0.6,
                 image_url="https://images.unsplash.com/photo-1585421514738-01798e348b17",
                 creator=user,
                 tags=[tags[0], tags[3]]
-            )
+            ),
         ]
 
         db.session.add_all(products)
         db.session.commit()
 
-        print("Database seeded successfully with image URLs!")
+        print("Database seeded successfully with image URLs and categories!")
 
 if __name__ == "__main__":
     seed_database()
