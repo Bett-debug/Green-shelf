@@ -1,8 +1,15 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000/api";
 
 async function request(path, options = {}) {
+  const token = localStorage.getItem('token');
+  const headers = { "Content-Type": "application/json" };
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  
   const res = await fetch(`${API_URL}${path}`, {
-    headers: { "Content-Type": "application/json" },
+    headers,
     ...options,
   });
   if (!res.ok) {
@@ -26,6 +33,12 @@ export const tags = {
   list: () => request("/tags"),
   create: (payload) => request("/tags", { method: "POST", body: JSON.stringify(payload) }),
   remove: (id) => request(`/tags/${id}`, { method: "DELETE" })
+};
+
+export const auth = {
+  register: (payload) => request("/users/register", { method: "POST", body: JSON.stringify(payload) }),
+  login: (payload) => request("/users/login", { method: "POST", body: JSON.stringify(payload) }),
+  getCurrentUser: () => request("/users/me")
 };
 
 export const users = {

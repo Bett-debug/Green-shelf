@@ -6,17 +6,18 @@ load_dotenv()
 
 client = None
 try:
-    if os.getenv('OPENAI_API_KEY'):
-        client = cohere.Client(api_key=os.getenv('OPENAI_API_KEY'))
+    if os.getenv('COHERE_API_KEY'):
+        client = cohere.Client(api_key=os.getenv('COHERE_API_KEY'))
 except Exception as e:
     print(f"Failed to initialize Cohere client: {e}")
+
 
 def get_sustainability_recommendations(product):
     """
     Generate sustainability recommendations for a given product using Cohere.
     """
     if not client:
-        return ["Cohere API key not configured. Please set OPENAI_API_KEY in your .env file."]
+        return ["Cohere API key not configured. Please set COHERE_API_KEY in your .env file."]
 
     message = f"""
     You are a sustainability expert. Based on the following product details, give 3–5 practical recommendations
@@ -52,23 +53,25 @@ def get_sustainability_recommendations(product):
         print(f"Cohere API Error: {str(e)}")
         return [f"Error generating recommendations: {str(e)}"]
 
+
 def get_ai_chat_response(user_message, conversation_history=None):
     """
     Generate AI chat response for sustainability and eco-friendly product queries.
-    
+
     Args:
         user_message: The user's current message
-        conversation_history: List of previous messages in format [{"role": "USER/CHATBOT", "message": "..."}]
-    
+        conversation_history: List of previous messages in format
+            [{"role": "user" or "assistant", "content": "..."}]
+
     Returns:
         str: AI assistant's response
     """
     if not client:
-        return "I'm currently unavailable. The Cohere API key is not configured. Please contact support."
-    
+        return "I'm currently unavailable . The Cohere API key is not configured."
+
     # System prompt for the AI assistant
     system_prompt = """You are GreenShelf Assistant, a friendly and knowledgeable AI helper for an eco-friendly e-commerce platform.
-    
+
 Your role is to:
 - Help users find sustainable and eco-friendly products
 - Provide tips on green living and sustainability
@@ -77,27 +80,22 @@ Your role is to:
 - Educate users about recycling, composting, and reducing waste
 - Be encouraging and positive about sustainable choices
 
-Keep responses concise (2-3 sentences), friendly, and actionable. Use emojis occasionally to be engaging 🌿."""
+Keep responses concise (2-3 sentences), friendly, and actionable. Use emojis occasionally to be engaging ."""
 
     try:
-        # Build chat history in Cohere format
-        chat_history = []
+        chat_history = [{"role": "SYSTEM", "message": system_prompt}]
+
         
-        # Add system prompt as first message with correct role
-        chat_history.append({"role": "SYSTEM", "message": system_prompt})
-        
-        # Add conversation history if provided (with correct roles)
         if conversation_history:
             for msg in conversation_history:
                 role = msg.get("role", "").upper()
                 content = msg.get("content", "") or msg.get("message", "")
                 if role in ["USER", "ASSISTANT", "CHATBOT"]:
-                    # Map roles to Cohere expected roles
                     if role == "ASSISTANT":
-                        role = "CHATBOT"
+                        role = "CHATBOT"  
                     chat_history.append({"role": role, "message": content})
+
         
-        # Get AI response
         response = client.chat(
             model="c4ai-aya-23",
             message=user_message,
@@ -105,9 +103,9 @@ Keep responses concise (2-3 sentences), friendly, and actionable. Use emojis occ
             max_tokens=200,
             temperature=0.8
         )
-        
+
         return response.text.strip()
-    
+
     except Exception as e:
         print(f"Cohere API Error: {str(e)}")
-        return f"I apologize, but I'm having trouble processing your request right now. Please try again in a moment. 🌱"
+        return "I’m having a small hiccup right now  — please try again in a moment."

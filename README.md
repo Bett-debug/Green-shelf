@@ -1,4 +1,4 @@
-# Sustainable Shelf Backend
+# Green Shelf Backend
 
 A Flask-based REST API for managing sustainable products with AI-powered recommendations.
 
