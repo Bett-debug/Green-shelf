@@ -224,32 +224,50 @@ def get_recommendations(id):
 @api.route('/chat', methods=['POST'])
 def chat():
     """
-    AI Chat endpoint for sustainability questions and product recommendations
-    Body: {
-        "message": "user's message",
-        "conversation_history": [optional array of previous messages]
-    }
+    AI Chat endpoint for sustainability questions and product recommendations.
+    Now includes context from your products and tags.
     """
     data = request.get_json()
-    
     if not data or 'message' not in data:
         return jsonify({'error': 'Message is required'}), 400
-    
+
     user_message = data['message'].strip()
     if not user_message:
         return jsonify({'error': 'Message cannot be empty'}), 400
-    
-    # Get conversation history if provided
+
     conversation_history = data.get('conversation_history', [])
-    
-    # Get AI response
-    ai_response = get_ai_chat_response(user_message, conversation_history)
-    
+
+    # 🧠 Contextual training from database
+    products = Product.query.limit(5).all()
+    tags = Tag.query.limit(5).all()
+
+    context_text = "\n".join([
+        f"- {p.name} ({p.category or 'Uncategorized'}): "
+        f"Eco Score {p.sustainability_score or 'N/A'}/10, "
+        f"Carbon {p.carbon_footprint or 'N/A'} kg CO₂"
+        for p in products
+    ])
+    tag_text = ", ".join([t.name for t in tags])
+
+    contextual_message = f"""
+    You are GreenShelf Assistant 🌿.
+    Here are some sample products and their eco details:
+    {context_text}
+
+    Tags include: {tag_text}.
+
+    User asked: {user_message}
+    """
+
+    ai_response = get_ai_chat_response(contextual_message, conversation_history)
+
     from datetime import datetime
     return jsonify({
         'response': ai_response,
-        'timestamp': datetime.utcnow().isoformat()
+        'timestamp': datetime.utcnow().isoformat(),
+        'context_used': True
     }), 200
+
 
 
 # ---------------- Tags ----------------
