@@ -1,23 +1,32 @@
-import cohere
 import os
+import cohere
 from dotenv import load_dotenv
 
+# ✅ Load environment variables
 load_dotenv()
 
+# ✅ Initialize Cohere client
 client = None
 try:
-    if os.getenv('COHERE_API_KEY'):
-        client = cohere.Client(api_key=os.getenv('COHERE_API_KEY'))
+    api_key = os.getenv("COHERE_API_KEY")
+    if api_key:
+        client = cohere.Client(api_key=api_key)
+        print("✅ Cohere client initialized successfully")
+    else:
+        print("⚠️ COHERE_API_KEY not found in .env file")
 except Exception as e:
-    print(f"Failed to initialize Cohere client: {e}")
+    print(f"❌ Failed to initialize Cohere client: {e}")
 
 
+# -------------------------------
+# 🌿 Sustainability Recommendations
+# -------------------------------
 def get_sustainability_recommendations(product):
     """
     Generate sustainability recommendations for a given product using Cohere.
     """
     if not client:
-        return ["Cohere API key not configured. Please set COHERE_API_KEY in your .env file."]
+        return ["⚠️ Cohere API key not configured. Please set COHERE_API_KEY in your .env file."]
 
     message = f"""
     You are a sustainability expert. Based on the following product details, give 3–5 practical recommendations
@@ -35,41 +44,35 @@ def get_sustainability_recommendations(product):
     - Eco-friendly packaging
     - Consumer use and disposal tips
 
-    Format as a simple list.
+    Format as a simple numbered list.
     """
 
     try:
         response = client.chat(
-            model="c4ai-aya-23",
+            model="command-r-plus",  # ✅ Updated to valid model
             message=message,
             max_tokens=300,
             temperature=0.7
         )
 
         content = response.text.strip()
-        return [line.strip("-• ").strip() for line in content.split("\n") if line.strip()]
+        return [line.strip("-•1234567890. ").strip() for line in content.split("\n") if line.strip()]
 
     except Exception as e:
-        print(f"Cohere API Error: {str(e)}")
+        print(f"❌ Cohere API Error: {str(e)}")
         return [f"Error generating recommendations: {str(e)}"]
 
 
+# -------------------------------
+# 💬 General AI Chat Assistant
+# -------------------------------
 def get_ai_chat_response(user_message, conversation_history=None):
     """
     Generate AI chat response for sustainability and eco-friendly product queries.
-
-    Args:
-        user_message: The user's current message
-        conversation_history: List of previous messages in format
-            [{"role": "user" or "assistant", "content": "..."}]
-
-    Returns:
-        str: AI assistant's response
     """
     if not client:
-        return "I'm currently unavailable . The Cohere API key is not configured."
+        return "⚠️ I'm currently unavailable — the Cohere API key is not configured."
 
-    # System prompt for the AI assistant
     system_prompt = """You are GreenShelf Assistant, a friendly and knowledgeable AI helper for an eco-friendly e-commerce platform.
 
 Your role is to:
@@ -80,32 +83,37 @@ Your role is to:
 - Educate users about recycling, composting, and reducing waste
 - Be encouraging and positive about sustainable choices
 
-Keep responses concise (2-3 sentences), friendly, and actionable. Use emojis occasionally to be engaging ."""
+Keep responses concise (2–3 sentences), friendly, and actionable. Use emojis occasionally to be engaging 🌿.
+"""
 
     try:
         chat_history = [{"role": "SYSTEM", "message": system_prompt}]
 
-        
+        # Add previous messages
         if conversation_history:
             for msg in conversation_history:
                 role = msg.get("role", "").upper()
                 content = msg.get("content", "") or msg.get("message", "")
                 if role in ["USER", "ASSISTANT", "CHATBOT"]:
                     if role == "ASSISTANT":
-                        role = "CHATBOT"  
+                        role = "CHATBOT"
                     chat_history.append({"role": role, "message": content})
 
-        
         response = client.chat(
-            model="c4ai-aya-23",
+            model="command-r-plus",  # ✅ Use latest model
             message=user_message,
             chat_history=chat_history,
-            max_tokens=200,
+            max_tokens=250,
             temperature=0.8
         )
 
         return response.text.strip()
 
     except Exception as e:
-        print(f"Cohere API Error: {str(e)}")
-        return "I’m having a small hiccup right now  — please try again in a moment."
+        print(f"❌ Cohere API Error: {str(e)}")
+        if "401" in str(e) or "invalid" in str(e).lower():
+            return "⚠️ Invalid Cohere API key. Please check your .env file."
+        elif "429" in str(e):
+            return "🌿 You’ve hit the API rate limit — please wait a moment and try again."
+        else:
+            return "😅 I’m having a small hiccup right now — please try again soon."
