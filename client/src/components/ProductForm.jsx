@@ -39,7 +39,7 @@ const ProductForm = ({ onSubmit, initialData = {} }) => {
     >
       <h2 className="text-xl font-semibold text-emerald-700 mb-3">Product Details</h2>
 
-      {/* Image Upload */}
+      
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Product Image
@@ -60,7 +60,7 @@ const ProductForm = ({ onSubmit, initialData = {} }) => {
         )}
       </div>
 
-      {/* Product Name */}
+      
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Product Name *
@@ -76,7 +76,7 @@ const ProductForm = ({ onSubmit, initialData = {} }) => {
         />
       </div>
 
-      {/* Description */}
+      
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Description
@@ -91,10 +91,10 @@ const ProductForm = ({ onSubmit, initialData = {} }) => {
         />
       </div>
 
-      {/* Price */}
+      
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Price ($) *
+          Price (Ksh) *
         </label>
         <input
           name="price"
@@ -108,7 +108,7 @@ const ProductForm = ({ onSubmit, initialData = {} }) => {
         />
       </div>
 
-      {/* Category Dropdown */}
+      
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Category
@@ -128,7 +128,7 @@ const ProductForm = ({ onSubmit, initialData = {} }) => {
         </select>
       </div>
 
-      {/* Sustainability Score */}
+      
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Sustainability Score (1-10)
@@ -145,7 +145,7 @@ const ProductForm = ({ onSubmit, initialData = {} }) => {
         />
       </div>
 
-      {/* Carbon Footprint */}
+      
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Carbon Footprint (kg CO₂)
@@ -161,7 +161,7 @@ const ProductForm = ({ onSubmit, initialData = {} }) => {
         />
       </div>
 
-      {/* Save Button */}
+      
       <button
         type="submit"
         className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg font-medium transition"

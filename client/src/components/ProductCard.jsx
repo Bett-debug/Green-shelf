@@ -26,7 +26,7 @@ const ProductCard = ({ product }) => {
       
       {product.price && (
         <p className="text-emerald-600 font-bold mt-1">
-          Ksh {Number(product.price).toFixed(2)}
+          Ksh {Number(product.price)}
         </p>
       )}
 
