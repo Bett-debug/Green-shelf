@@ -48,8 +48,9 @@ def get_sustainability_recommendations(product):
     """
 
     try:
+        # ✅ Use Cohere’s latest chat-capable model
         response = client.chat(
-            model="command-r-plus",  # ✅ Updated to valid model
+            model="c4ai-aya-23",
             message=message,
             max_tokens=300,
             temperature=0.7
@@ -59,7 +60,7 @@ def get_sustainability_recommendations(product):
         return [line.strip("-•1234567890. ").strip() for line in content.split("\n") if line.strip()]
 
     except Exception as e:
-        print(f"❌ Cohere API Error: {str(e)}")
+        print(f"❌ Cohere API Error (recommendations): {str(e)}")
         return [f"Error generating recommendations: {str(e)}"]
 
 
@@ -99,8 +100,9 @@ Keep responses concise (2–3 sentences), friendly, and actionable. Use emojis o
                         role = "CHATBOT"
                     chat_history.append({"role": role, "message": content})
 
+        # ✅ Use current stable model
         response = client.chat(
-            model="command-r-plus",  # ✅ Use latest model
+            model="c4ai-aya-23",
             message=user_message,
             chat_history=chat_history,
             max_tokens=250,
@@ -110,7 +112,8 @@ Keep responses concise (2–3 sentences), friendly, and actionable. Use emojis o
         return response.text.strip()
 
     except Exception as e:
-        print(f"❌ Cohere API Error: {str(e)}")
+        print(f"❌ Cohere API Error (chat): {str(e)}")
+
         if "401" in str(e) or "invalid" in str(e).lower():
             return "⚠️ Invalid Cohere API key. Please check your .env file."
         elif "429" in str(e):
