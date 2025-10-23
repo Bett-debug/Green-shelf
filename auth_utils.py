@@ -19,7 +19,7 @@ def get_current_user():
         return None
 
 
-# ---------------- Decorators ---------------- #
+
 
 def admin_required():
     """
@@ -67,7 +67,7 @@ def shopper_required():
     return wrapper
 
 
-# ---------------- Helpers ---------------- #
+
 
 def is_admin_user():
     """

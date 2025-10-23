@@ -250,7 +250,7 @@ def chat():
     tag_text = ", ".join([t.name for t in tags])
 
     contextual_message = f"""
-    You are GreenShelf Assistant 🌿.
+    You are GreenShelf Assistant .
     Here are some sample products and their eco details:
     {context_text}
 
@@ -289,7 +289,7 @@ def create_tag():
     if not data or 'name' not in data:
         return jsonify({'error': 'Tag name required'}), 400
     
-    # Check if tag already exists
+    
     existing_tag = Tag.query.filter_by(name=data['name']).first()
     if existing_tag:
         return jsonify({'error': 'Tag already exists'}), 400

@@ -1,6 +1,6 @@
 # Authentication System Implementation Summary
 
-## ✅ Completed Tasks
+##  Completed Tasks
 
 ### 1. **User Model Enhancement**
 - Added `role` field (shopper/admin) with default value 'shopper'
@@ -36,24 +36,24 @@ Updated [`routes.py`](routes.py):
 - Provided curl commands for testing
 - Documented frontend integration patterns
 
-## 🧪 Test Results
+##  Test Results
 
 All authentication endpoints tested and verified:
 
-### ✅ User Registration
+###  User Registration
 - **Admin registration**: Successfully created admin user
 - **Shopper registration**: Successfully created shopper user
 - Both return JWT tokens immediately upon registration
 
-### ✅ User Login
+### User Login
 - Successfully authenticates users
 - Returns JWT token and user information
 - Validates account active status
 
-### ✅ Role-Based Access Control
-- **Shopper attempting admin action**: ❌ Correctly denied (403 Forbidden)
-- **Admin creating product**: ✅ Successfully created product
-- **Get current user info**: ✅ Returns correct user data with role
+###  Role-Based Access Control
+- **Shopper attempting admin action**:  Correctly denied (403 Forbidden)
+- **Admin creating product**:  Successfully created product
+- **Get current user info**: Returns correct user data with role
 
 ### Test Commands Used:
 ```bash
