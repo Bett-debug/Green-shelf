@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 const ProtectedRoute = ({ children, requireAdmin = false }) => {
   const { isAuthenticated, isAdmin, loading } = useAuth();
 
-  // Show loading state while checking authentication
+  
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -17,12 +17,12 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
     );
   }
 
-  // Redirect to login if not authenticated
+  
   if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
   }
 
-  // Redirect to home if admin access required but user is not admin
+  
   if (requireAdmin && !isAdmin()) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">

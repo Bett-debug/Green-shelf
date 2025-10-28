@@ -22,12 +22,7 @@ const Home = () => {
             >
               Browse Products
             </Link>
-            <Link
-              to="/add"
-              className="px-6 py-3 border border-emerald-300 text-emerald-700 rounded-lg hover:bg-emerald-50 font-medium transition"
-            >
-              Add Product
-            </Link>
+            
           </div>
         </div>
 

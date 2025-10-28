@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from models import db, User, Product, Purchase, Tag, Review
-from ai_utils import get_sustainability_recommendations
+from ai_utils import get_sustainability_recommendations, get_ai_chat_response
 from auth_utils import admin_required, shopper_required, get_current_user
 
 api = Blueprint('api', __name__)
@@ -219,6 +219,57 @@ def get_recommendations(id):
     return jsonify(recommendations)
 
 
+# ---------------- AI Chat ----------------
+
+@api.route('/chat', methods=['POST'])
+def chat():
+    """
+    AI Chat endpoint for sustainability questions and product recommendations.
+    Now includes context from your products and tags.
+    """
+    data = request.get_json()
+    if not data or 'message' not in data:
+        return jsonify({'error': 'Message is required'}), 400
+
+    user_message = data['message'].strip()
+    if not user_message:
+        return jsonify({'error': 'Message cannot be empty'}), 400
+
+    conversation_history = data.get('conversation_history', [])
+
+    # 🧠 Contextual training from database
+    products = Product.query.limit(5).all()
+    tags = Tag.query.limit(5).all()
+
+    context_text = "\n".join([
+        f"- {p.name} ({p.category or 'Uncategorized'}): "
+        f"Eco Score {p.sustainability_score or 'N/A'}/10, "
+        f"Carbon {p.carbon_footprint or 'N/A'} kg CO₂"
+        for p in products
+    ])
+    tag_text = ", ".join([t.name for t in tags])
+
+    contextual_message = f"""
+    You are GreenShelf Assistant .
+    Here are some sample products and their eco details:
+    {context_text}
+
+    Tags include: {tag_text}.
+
+    User asked: {user_message}
+    """
+
+    ai_response = get_ai_chat_response(contextual_message, conversation_history)
+
+    from datetime import datetime
+    return jsonify({
+        'response': ai_response,
+        'timestamp': datetime.utcnow().isoformat(),
+        'context_used': True
+    }), 200
+
+
+
 # ---------------- Tags ----------------
 
 @api.route('/tags', methods=['GET'])
@@ -238,7 +289,7 @@ def create_tag():
     if not data or 'name' not in data:
         return jsonify({'error': 'Tag name required'}), 400
     
-    # Check if tag already exists
+    
     existing_tag = Tag.query.filter_by(name=data['name']).first()
     if existing_tag:
         return jsonify({'error': 'Tag already exists'}), 400

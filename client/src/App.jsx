@@ -14,7 +14,7 @@ import EditProduct from "./pages/EditProduct";
 import Tags from "./pages/Tags";
 import Recommendations from "./pages/Recommendations";
 import UserPage from "./pages/UserPage";
-import AIChatPage from "./pages/AIChatPage";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -66,14 +66,7 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/chat"
-                element={
-                  <ProtectedRoute>
-                    <AIChatPage />
-                  </ProtectedRoute>
-                }
-              />
+              
               
               {/* Protected Routes - Admin Only */}
               <Route

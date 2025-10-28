@@ -7,7 +7,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    role = db.Column(db.String(20), nullable=False, default='shopper')  # 'shopper' or 'admin'
+    role = db.Column(db.String(20), nullable=False, default='shopper')  
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     products = db.relationship('Product', backref='creator', lazy=True)
@@ -45,7 +45,7 @@ class Purchase(db.Model):
     quantity = db.Column(db.Integer, default=1)
     purchased_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    # Relationships
+    
     user = db.relationship('User', backref=db.backref('purchases', lazy=True))
     product = db.relationship('Product', backref=db.backref('purchases', lazy=True))
 
@@ -78,6 +78,8 @@ class Product(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     tags = db.relationship('Tag', secondary=product_tags, back_populates='products')
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    store_url = db.Column(db.String(255), nullable=True)
+
 
     def to_dict(self):
         return {
@@ -90,8 +92,9 @@ class Product(db.Model):
             'carbon_footprint': self.carbon_footprint,
             'image_url': self.image_url,  # ✅ Include in JSON response
             'user_id': self.user_id,
-            'tags': [tag.to_dict() for tag in self.tags],  # return full tag info, not just names
-            'created_at': self.created_at.isoformat() if self.created_at else None
+            'tags': [tag.to_dict() for tag in self.tags],  
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'store_url': self.store_url,
         }
 
 

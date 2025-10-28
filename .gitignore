@@ -1,12 +1,46 @@
-# Python
+# ========================================
+#  Green Shelf - Combined .gitignore
+# For Flask + React (Vite) + SQLite setup
+# ========================================
+
+# Python cache & build files
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
+
+# Virtual environments
 env/
 venv/
 ENV/
+
+# Flask / SQLAlchemy / Instance files
+instance/
+.webassets-cache
+*.db
+*.sqlite
+*.sqlite3
+
+# Flask Migrations
+migrations/
+
+# Node (Frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend build files (Vite)
+client/dist/
+client/.vite/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Egg and packaging
 build/
 develop-eggs/
 dist/
@@ -23,40 +57,17 @@ wheels/
 .installed.cfg
 *.egg
 
-# Flask
-instance/
-.webassets-cache
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# IDE
+# IDEs and editors
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-
-# History files
 .history/
 
-# Node
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Build files
-client/.vite/
-client/dist/
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-# OS
+# OS files
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log
