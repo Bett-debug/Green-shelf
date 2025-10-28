@@ -1,19 +1,14 @@
-services:
-  # PostgreSQL Database
-  - type: pserv
-    name: greenshelf-db
-    env: docker
+databases:
+  - name: greenshelf-db
+    databaseName: greenshelf
+    user: greenshelf_user
     plan: free
-    region: oregon
-    databases:
-      - name: greenshelf
-        user: greenshelf_user
 
+services:
   # Backend Web Service
   - type: web
     name: greenshelf-backend
-    env: python
-    region: oregon
+    runtime: python
     plan: free
     buildCommand: "./build.sh"
     startCommand: "gunicorn app:app"
@@ -28,4 +23,3 @@ services:
         generateValue: true
       - key: COHERE_API_KEY
         sync: false
-    healthCheckPath: /
