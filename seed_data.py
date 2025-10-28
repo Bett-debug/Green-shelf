@@ -34,7 +34,8 @@ def seed_database():
                 carbon_footprint=0.5,
                 image_url="https://images.unsplash.com/photo-1617993669588-3440909d7316",
                 creator=user,
-                tags=[tags[0], tags[1]]
+                tags=[tags[0], tags[1]],
+                store_url="https://grounded.co.ke/product/adult-toothbrush/?srsltid=AfmBOoqy4QNGXogLq_K5vO983W12hH6awETNsopwOZNGEPNUkJ9pKONh"
             ),
             Product(
                 name="Natural Soap Bar",
@@ -45,7 +46,8 @@ def seed_database():
                 carbon_footprint=0.3,
                 image_url="https://images.unsplash.com/photo-1600857062241-98e5dba60f2f",
                 creator=user,
-                tags=[tags[0], tags[3]]
+                tags=[tags[0], tags[3]],
+                store_url="https://www.amazon.com/example-bottle"
             ),
             Product(
                 name="Bamboo Cotton Swabs",
@@ -56,7 +58,8 @@ def seed_database():
                 carbon_footprint=0.2,
                 image_url="https://images.unsplash.com/photo-1631730486572-226d1f595b68",
                 creator=user,
-                tags=[tags[0], tags[1]]
+                tags=[tags[0], tags[1]],
+                store_url="https://www.amazon.com/example-bottle"
             ),
             Product(
                 name="Reusable Makeup Remover Pads",
@@ -67,7 +70,8 @@ def seed_database():
                 carbon_footprint=0.4,
                 image_url="https://images.unsplash.com/photo-1596755389378-c31d21fd1273",
                 creator=user,
-                tags=[tags[0], tags[4]]
+                tags=[tags[0], tags[4]],
+                store_url="https://www.amazon.com/example-bottle"
             ),
 
             
@@ -80,7 +84,8 @@ def seed_database():
                 carbon_footprint=10.0,
                 image_url="https://images.unsplash.com/photo-1509395176047-4a66953fd231",
                 creator=user,
-                tags=[tags[2]]
+                tags=[tags[2]],
+                store_url="https://www.amazon.com/example-bottle"
             ),
             Product(
                 name="Solar Powered Lamp",
@@ -91,7 +96,8 @@ def seed_database():
                 carbon_footprint=0.1,
                 image_url="https://images.unsplash.com/photo-1597848212624-a19eb35e2655",
                 creator=user,
-                tags=[tags[2], tags[0]]
+                tags=[tags[2], tags[0]],
+                store_url="https://www.amazon.com/example-bottle"
             ),
             Product(
                 name="LED Smart Bulb",
@@ -102,7 +108,8 @@ def seed_database():
                 carbon_footprint=2.5,
                 image_url="https://images.unsplash.com/photo-1550985616-10810253b84d",
                 creator=user,
-                tags=[tags[2]]
+                tags=[tags[2]],
+                store_url="https://www.amazon.com/example-bottle"
             ),
             Product(
                 name="Rechargeable Battery Pack",
@@ -113,7 +120,8 @@ def seed_database():
                 carbon_footprint=5.0,
                 image_url="https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5",
                 creator=user,
-                tags=[tags[2], tags[4]]
+                tags=[tags[2], tags[4]],
+                store_url="https://www.amazon.com/example-bottle"
             ),
 
             
@@ -126,7 +134,8 @@ def seed_database():
                 carbon_footprint=0.2,
                 image_url="https://images.unsplash.com/photo-1623684194967-48075185a58c",
                 creator=user,
-                tags=[tags[0], tags[4]]
+                tags=[tags[0], tags[4]],
+                store_url="https://www.amazon.com/example-bottle"
             ),
             Product(
                 name="Bamboo Cutlery Set",
@@ -137,7 +146,8 @@ def seed_database():
                 carbon_footprint=0.3,
                 image_url="https://images.unsplash.com/photo-1610701596007-11502861dcfa",
                 creator=user,
-                tags=[tags[0], tags[4]]
+                tags=[tags[0], tags[4]],
+                store_url="https://www.amazon.com/example-bottle"
             ),
             Product(
                 name="Beeswax Food Wraps",
@@ -159,7 +169,8 @@ def seed_database():
                 carbon_footprint=3.0,
                 image_url="https://images.unsplash.com/photo-1604335399105-a0c585fd81a1",
                 creator=user,
-                tags=[tags[0], tags[1]]
+                tags=[tags[0], tags[1]],
+                
             ),
 
             # Home & Garden Category

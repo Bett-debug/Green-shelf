@@ -78,6 +78,8 @@ class Product(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     tags = db.relationship('Tag', secondary=product_tags, back_populates='products')
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    store_url = db.Column(db.String(255), nullable=True)
+
 
     def to_dict(self):
         return {
@@ -91,7 +93,13 @@ class Product(db.Model):
             'image_url': self.image_url,  
             'user_id': self.user_id,
             'tags': [tag.to_dict() for tag in self.tags],  
-            'created_at': self.created_at.isoformat() if self.created_at else None
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'store_url': self.store_url,
+
+            
+
+            
+
         }
 
 
