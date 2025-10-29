@@ -208,4 +208,3 @@ To deploy updates:
 
 ---
 
-**Note:** This deployment configuration uses Render's free tier, which is perfect for development and testing. For production applications with higher traffic, consider upgrading to a paid plan for better performance and reliability.
