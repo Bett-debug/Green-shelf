@@ -88,35 +88,53 @@ def register_user():
     Register a new user with role (shopper or admin)
     Body: {username, email, password, role (optional, defaults to 'shopper')}
     """
-    data = request.get_json()
-    if not data or not all(k in data for k in ('username', 'email', 'password')):
-        return jsonify({'error': 'Username, email, and password are required'}), 400
-    
-    # Validate role
-    role = data.get('role', 'shopper').lower()
-    if role not in ['shopper', 'admin']:
-        return jsonify({'error': 'Role must be either "shopper" or "admin"'}), 400
-    
-    # Check for existing username or email
-    if User.query.filter_by(username=data['username']).first():
-        return jsonify({'error': 'Username already taken'}), 400
-    if User.query.filter_by(email=data['email']).first():
-        return jsonify({'error': 'Email already registered'}), 400
-    
-    # Create and save user
-    user = User(username=data['username'], email=data['email'], role=role)
-    user.set_password(data['password'])
-    db.session.add(user)
-    db.session.commit()
-    
-    # Create access token
-    access_token = create_access_token(identity=str(user.id))
-    
-    return jsonify({
-        'message': 'User registered successfully',
-        'access_token': access_token,
-        'user': user.to_dict()
-    }), 201
+    try:
+        data = request.get_json()
+        if not data or not all(k in data for k in ('username', 'email', 'password')):
+            return jsonify({'error': 'Username, email, and password are required'}), 400
+        
+        # Validate role
+        role = data.get('role', 'shopper').lower()
+        if role not in ['shopper', 'admin']:
+            return jsonify({'error': 'Role must be either "shopper" or "admin"'}), 400
+        
+        # Check for existing username or email
+        existing_user = User.query.filter_by(username=data['username']).first()
+        if existing_user:
+            return jsonify({'error': 'Username already taken'}), 400
+        
+        existing_email = User.query.filter_by(email=data['email']).first()
+        if existing_email:
+            return jsonify({'error': 'Email already registered'}), 400
+        
+        # Create and save user
+        user = User(username=data['username'], email=data['email'], role=role)
+        user.set_password(data['password'])
+        
+        print(f"🔍 Attempting to add user: {user.username}, {user.email}, {user.role}")
+        db.session.add(user)
+        
+        print(f"🔍 Attempting to commit user to database...")
+        db.session.commit()
+        
+        print(f"✅ User created successfully with ID: {user.id}")
+        
+        # Create access token
+        access_token = create_access_token(identity=str(user.id))
+        
+        return jsonify({
+            'message': 'User registered successfully',
+            'access_token': access_token,
+            'user': user.to_dict()
+        }), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        print(f"❌ ERROR in register_user: {type(e).__name__}")
+        print(f"❌ Error message: {str(e)}")
+        import traceback
+        print(f"❌ Full traceback:\n{traceback.format_exc()}")
+        return jsonify({'error': f'Registration failed: {str(e)}'}), 500
 
 @api.route('/users/login', methods=['POST'])
 def login_user():
