@@ -23,10 +23,11 @@ jwt = JWTManager(app)
 
 init_db(app)
 
-# Force create all database tables
+# Force recreate all database tables with correct schema
 with app.app_context():
-    db.create_all()
-    print("✅ Database tables created successfully")
+    db.drop_all()  # Drop old tables with outdated schema
+    db.create_all()  # Create fresh tables matching current models
+    print("✅ Database tables recreated successfully")
 
 migrate = Migrate(app, db)
 
