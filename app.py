@@ -23,6 +23,11 @@ jwt = JWTManager(app)
 
 init_db(app)
 
+# Force create all database tables
+with app.app_context():
+    db.create_all()
+    print("✅ Database tables created successfully")
+
 migrate = Migrate(app, db)
 
 register_routes(app)
