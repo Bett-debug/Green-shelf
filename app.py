@@ -11,13 +11,14 @@ from routes import register_routes
 from flask_migrate import Migrate
 
 app = Flask(__name__, static_folder='client/dist', static_url_path='')
+
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'fallback-secret-key')
 
 
-if os.getenv('FLASK_ENV') == 'production':
-    CORS(app, origins=[os.getenv('FRONTEND_URL', '*')])
-else:
-    CORS(app)
+
+
 
 jwt = JWTManager(app)
 

@@ -1,28 +1,22 @@
-const API_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  "https://green-shelf-xqb9.onrender.com/api";
+const API_URL = import.meta.env.VITE_API_BASE_URL || "https://green-shelf-xqb9.onrender.com";
 
 async function request(path, options = {}) {
   const token = localStorage.getItem("token");
   const headers = { "Content-Type": "application/json" };
 
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
+  if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const res = await fetch(`${API_URL}${path}`, {
+  const res = await fetch(`${API_URL}/api${path}`, {
     headers,
     ...options,
   });
 
-  if (!res.ok) {
-    const txt = await res.text();
-    throw new Error(txt || res.statusText);
-  }
-
+  if (!res.ok) throw new Error(await res.text());
   if (res.status === 204) return null;
+
   return res.json();
 }
+
 
 export const products = {
   list: () => request("/products"),
