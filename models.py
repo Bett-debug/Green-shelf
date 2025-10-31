@@ -90,7 +90,7 @@ class Product(db.Model):
             'category': self.category,
             'sustainability_score': self.sustainability_score,
             'carbon_footprint': self.carbon_footprint,
-            'image_url': self.image_url,  # ✅ Include in JSON response
+            'image_url': self.image_url, 
             'user_id': self.user_id,
             'tags': [tag.to_dict() for tag in self.tags],  
             'created_at': self.created_at.isoformat() if self.created_at else None,
