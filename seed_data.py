@@ -7,8 +7,14 @@ def seed_database():
         db.create_all()
 
         
-        user = User(username="EcoGuru", email="eco@example.com")
-        user.set_password("password123")  
+        # Create admin user
+        admin = User(username="admin", email="admin@example.com", role="admin")
+        admin.set_password("admin123")
+        db.session.add(admin)
+        
+        # Create regular user
+        user = User(username="EcoGuru", email="eco@example.com", role="shopper")
+        user.set_password("password123")
         db.session.add(user)
 
         

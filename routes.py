@@ -237,7 +237,7 @@ def chat():
 
     conversation_history = data.get('conversation_history', [])
 
-    # 🧠 Contextual training from database
+    
     products = Product.query.limit(5).all()
     tags = Tag.query.limit(5).all()
 
