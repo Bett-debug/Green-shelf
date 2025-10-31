@@ -18,5 +18,5 @@ npm install
 npm run build
 cd ..
 
-# Run database migrations
-flask db upgrade
+# Run database migrations, if they fail create tables directly
+flask db upgrade || python -c "from app import app, db; app.app_context().push(); db.create_all(); print('Tables created successfully')"

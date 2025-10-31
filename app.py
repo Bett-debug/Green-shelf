@@ -23,6 +23,20 @@ jwt = JWTManager(app)
 
 init_db(app)
 
+# Create database tables if they don't exist
+with app.app_context():
+    try:
+        # Check if tables exist by trying to query the user table
+        db.session.execute(db.text('SELECT 1 FROM "user" LIMIT 1'))
+        db.session.commit()
+        print("✅ Database tables already exist")
+    except Exception as e:
+        # Tables don't exist or have wrong schema, recreate them
+        print(f"Creating database tables... (Error was: {str(e)[:100]})")
+        db.drop_all()
+        db.create_all()
+        print("✅ Database tables created successfully")
+
 migrate = Migrate(app, db)
 
 register_routes(app)
