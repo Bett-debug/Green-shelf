@@ -6,6 +6,10 @@ from auth_utils import admin_required, shopper_required, get_current_user
 
 api = Blueprint('api', __name__)
 
+
+
+
+
 # ---------------- Products ----------------
 
 @api.route('/products', methods=['GET'])
