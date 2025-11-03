@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_BASE_URL || "https://green-shelf-xqb9.onrender.com/api";
+const API_URL = import.meta.env.VITE_API_BASE_URL || "https://green-shelf-xqb9.onrender.com";
 
 async function request(path, options = {}) {
   const token = localStorage.getItem("token");
@@ -6,7 +6,7 @@ async function request(path, options = {}) {
 
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const res = await fetch(`${API_URL}${path}`, {
+  const res = await fetch(`${API_URL}/api${path}`, {
     headers,
     ...options,
   });
