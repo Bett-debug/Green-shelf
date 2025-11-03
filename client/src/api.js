@@ -6,7 +6,7 @@ async function request(path, options = {}) {
 
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const res = await fetch(`${API_URL}/api${path}`, {
+  const res = await fetch(`${API_URL}${path}`, {
     headers,
     ...options,
   });
