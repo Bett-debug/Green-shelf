@@ -243,12 +243,14 @@ def get_recommendations(id):
 
 # ---------------- AI Chat ----------------
 
-@api.route('/chat', methods=['POST'])
+@api.route('/chat', methods=['POST','OPTIONS'])
 def chat():
     """
     AI Chat endpoint for sustainability questions and product recommendations.
     Now includes context from your products and tags.
     """
+    if request.method =='OPTIONS':
+        return '',200
     data = request.get_json()
     if not data or 'message' not in data:
         return jsonify({'error': 'Message is required'}), 400
@@ -289,6 +291,10 @@ def chat():
         'timestamp': datetime.utcnow().isoformat(),
         'context_used': True
     }), 200
+
+
+
+
 
 
 
