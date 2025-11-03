@@ -31,7 +31,7 @@ const AIChatbot = () => {
     setIsLoading(true);
 
     try {
-      // Prepare conversation history (last 10 messages for context)
+      
       const conversationHistory = messages
         .slice(-10)
         .map((msg) => ({
@@ -39,8 +39,8 @@ const AIChatbot = () => {
           content: msg.text,
         }));
 
-      // Call the backend API
-      const response = await fetch(`${API_BASE_URL}/chat`, {
+     
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +78,7 @@ const AIChatbot = () => {
 
   return (
     <>
-      {/* Floating Chat Button */}
+      
       <button
         onClick={() => setOpen(!open)}
         className="fixed bottom-6 right-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg transition-all"
@@ -86,10 +86,10 @@ const AIChatbot = () => {
         {open ? <X size={24} /> : <MessageSquare size={26} />}
       </button>
 
-      {/* Chat Window */}
+      
       {open && (
         <div className="fixed bottom-24 right-6 w-80 md:w-96 bg-white border border-gray-200 rounded-xl shadow-xl flex flex-col overflow-hidden">
-          {/* Header */}
+          
           <div className="bg-emerald-600 text-white px-4 py-3 font-semibold text-sm flex justify-between items-center">
             GreenShelf Assistant
             <button onClick={() => setOpen(false)} className="text-white">
@@ -97,7 +97,7 @@ const AIChatbot = () => {
             </button>
           </div>
 
-          {/* Messages */}
+          
           <div
             ref={chatRef}
             className="flex-1 p-4 space-y-3 overflow-y-auto text-sm bg-gray-50"
@@ -123,7 +123,7 @@ const AIChatbot = () => {
             ))}
           </div>
 
-          {/* Input */}
+          
           <div className="border-t border-gray-200 p-3 bg-white flex items-center gap-2">
             <input
               value={input}
