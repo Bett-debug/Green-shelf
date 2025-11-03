@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_BASE_URL || "https://green-shelf-xqb9.onrender.com";
+const API_URL = import.meta.env.VITE_API_BASE_URL || "https://green-shelf-xqb9.onrender.com/api";
 
 async function request(path, options = {}) {
   const token = localStorage.getItem("token");
