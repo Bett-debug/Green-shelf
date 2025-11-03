@@ -14,14 +14,11 @@ app = Flask(__name__, static_folder='client/dist', static_url_path='')
 
 
 
-CORS(app, supports_credentials=True, resources={
-    r"/api/*": {
-        "origins": [
-            "https://green-shelf.netlify.app",
-            "http://localhost:5173" 
-        ]
-    }
-})
+CORS(app, resources={r"/api/*": {"origins": [
+    "https://green-shelf.netlify.app",
+    "http://localhost:5173"
+]}}, supports_credentials=True)
+
 
 
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'fallback-secret-key')
